@@ -1,0 +1,45 @@
+import React, { useState, useEffect } from "react";
+import AdminLayout from "./layouts/AdminLayout";
+import MediaCard from "./components/MediaCard";
+
+export default function Saloons() {
+  const [sal, setSal] = useState([]);
+  const [datachanged, setdatachanged] = useState(false);
+  
+    const fetchSaloons = async () => {
+      await fetch("http://localhost:5000/api/v1/saloon")
+        .then((sal) => sal.json())
+        .then((json) => {
+          if (json.success) {
+            setSal(json.data);
+          } else {
+            console.log("no data");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      };
+      useEffect(() => {
+        fetchSaloons();
+      }, []);
+
+  return (
+    <>
+      <AdminLayout>
+        <div className="flex justify-between">
+          <h1 className="mb-4 text-left text-2xl font-bold">Saloons</h1>
+          <button className="w-32 h-12 bg-gray-200 rounded-lg text-lg font-bold"
+          onClick={() => {
+            console.log(res);
+          }}>
+            Add
+          </button>
+        </div>
+        <div className="grid grid-cols-2 xl:grid-cols-3 gap-4 w-fit">
+        {sal && sal?.map((item) => <MediaCard item={item} setdatachanged={fetchSaloons} datachanged={"saloon"} key={item.id} />)}
+        </div>
+      </AdminLayout>
+    </>
+  );
+}
